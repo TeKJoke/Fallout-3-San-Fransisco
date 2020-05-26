@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "player.h"
 #include "map.h"
+#include "boss.h"
 
 void print_player(Player player) {
     std::cout << "Player Stats: " << std::endl;
@@ -60,45 +61,27 @@ bool player_in_map(Player p, Map m) {
 }
 
 void move_player(Player* player, bool& loop) {
-    int ans0, ans1, ans2, ans3;
+    int ans0, ans1;
 
     std::cout << "Do you wish to move your player?" << std::endl;
     std::cout << "1 For YES, 2 For NO (EXIT): ";
     std::cin >> ans0;
     switch(ans0) {
     case 1:
-        std::cout << "1 For X Axis, 2 For Y Axis: ";
+        std::cout << "1 For Right; 2 For Left; 3 For Up; 4 For Down: ";
         std::cin >> ans1;
         switch (ans1) {
         case 1:
-            std::cout << "1 For Right, 2 For Left: ";
-            std::cin >> ans2;
-            switch(ans2) {
-            case 1:
-                player->MoveX(1);
-                break;
-            case 2:
-                player->MoveX(-1);
-                break;
-            default:
-                std::cout << "ERROR" << std::endl;
-                break;
-            }
+            player->MoveX(1);
             break;
         case 2:
-            std::cout << "1 For Up, 2 For Down: ";
-            std::cin >> ans3;
-            switch(ans3) {
-            case 1:
-                player->MoveY(1);
-                break;
-            case 2:
-                player->MoveY(-1);
-                break;
-            default:
-                std::cout << "ERROR" << std::endl;
-                break;
-            }
+            player->MoveX(-1);
+            break;
+        case 3:
+            player->MoveY(1);
+            break;
+        case 4:
+            player->MoveY(-1);
             break;
         default:
             std::cout << "ERROR" << std::endl;
@@ -115,18 +98,40 @@ void move_player(Player* player, bool& loop) {
     }
 }
 
+void boss_room(Player* player, Boss* boss) {
+    std::cout << "You are in the boss room!\nYou cannot leave until one of you have died!" << std::endl;
+
+    bool loop = true;
+    while(loop) {
+        if(player->GetHealth() <= 0 || boss->GetHealth() <= 0) loop = false;
+
+        int chance = (rand() % 10) + 1;
+        if(chance < 6) {
+            boss->Damage(player->GetAttackDamage());
+        } else if(chance > 7) {
+            player->Damage(boss->GetAttackDamage());
+        }
+    }
+    std::cout << "Player health: " << player->GetHealth() << std::endl;
+    std::cout << "Boss health: " << boss->GetHealth() << std::endl;
+
+    return;
+}
+
 int main() {
-    srand(47329874);
+    srand(471329874);
 
     Player* player;
+    Boss* boss;
     //player = ask_player();
     player = new Player();
+    boss = new Boss();
 
     Map map = {3, 3};
 
     bool loop = true;
     while(loop) {
-        move_player(player, loop);
+        //move_player(player, loop);
 
         if(!player_in_map(*player, map)) {
             std::cout << "Player outside map borders! Resetting coordinates and damaging player!" << std::endl;
@@ -142,14 +147,22 @@ int main() {
             player->Damage(20);
         }
 
+        if(player->GetX() == 3 && player->GetY() == 3) {
+            boss_room(player, boss);
+        }
+
         if(player->GetHealth() <= 0) {
             std::cout << "You are dead :(" << std::endl;
             std::cout << "Thank you for playing Fallout 3: San Fransisco" << std::endl;
             loop = false;
+        } else if(boss->GetHealth() <= 0) {
+            std::cout << "You won the game congratulations! :D" << std::endl;
+            std::cout << "Thank you for playing Fallout 3: San Fransisco" << std::endl;
+            loop = false;
         }
 
-        print_player(*player);
     }
+    print_player(*player);
 
     delete player;
 

@@ -10,8 +10,8 @@ struct Special {
 };
 
 constexpr Special DEFAULT_SPECIAL = {5, 5, 5, 5, 5, 5, 5};
-constexpr int DEFAULT_X = 1;
-constexpr int DEFAULT_Y = 1;
+constexpr int DEFAULT_X = 3;
+constexpr int DEFAULT_Y = 3;
 
 class Player {
 private:
@@ -20,6 +20,7 @@ private:
     int x_pos;
     int y_pos;
     Special special;
+    int attack_damage;
 public:
     Player();
     Player(int health, std::string name, int x_pos, int y_pos, Special special);
@@ -31,6 +32,7 @@ public:
     void Move();
     void Damage(int damg);
     int GetHealth();
+    int GetAttackDamage();
 };
 
 #endif
