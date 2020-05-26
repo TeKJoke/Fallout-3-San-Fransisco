@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <stdlib.h>
 #include "player.h"
 #include "map.h"
 
@@ -58,61 +59,26 @@ bool player_in_map(Player p, Map m) {
     return true;
 }
 
-void print_player_pos(Player player) {
-    std::cout << "(X, Y) Position: " << "(" << player.GetX() << ", " << player.GetY() << ")" << std::endl;
-}
-
-void move_player(Player* player) {
-
-}
-
-int main() {
-    Player* player;
-    //player = ask_player();
-    player = new Player();
-
-    Map map = {3, 3};
-
+void move_player(Player* player, bool& loop) {
     int ans0, ans1, ans2, ans3;
-    bool loop = true;
-    while(loop) {
-        std::cout << "Do you wish to move your player?" << std::endl;
-        std::cout << "1 For YES, 2 For NO (EXIT): ";
-        std::cin >> ans0;
-        switch(ans0) {
+
+    std::cout << "Do you wish to move your player?" << std::endl;
+    std::cout << "1 For YES, 2 For NO (EXIT): ";
+    std::cin >> ans0;
+    switch(ans0) {
+    case 1:
+        std::cout << "1 For X Axis, 2 For Y Axis: ";
+        std::cin >> ans1;
+        switch (ans1) {
         case 1:
-            std::cout << "1 For X Axis, 2 For Y Axis: ";
-            std::cin >> ans1;
-            switch (ans1) {
+            std::cout << "1 For Right, 2 For Left: ";
+            std::cin >> ans2;
+            switch(ans2) {
             case 1:
-                std::cout << "1 For Right, 2 For Left: ";
-                std::cin >> ans2;
-                switch(ans2) {
-                case 1:
-                    player->MoveX(1);
-                    break;
-                case 2:
-                    player->MoveX(-1);
-                    break;
-                default:
-                    std::cout << "ERROR" << std::endl;
-                    break;
-                }
+                player->MoveX(1);
                 break;
             case 2:
-                std::cout << "1 For Up, 2 For Down: ";
-                std::cin >> ans3;
-                switch(ans3) {
-                case 1:
-                    player->MoveY(1);
-                    break;
-                case 2:
-                    player->MoveY(-1);
-                    break;
-                default:
-                    std::cout << "ERROR" << std::endl;
-                    break;
-                }
+                player->MoveX(-1);
                 break;
             default:
                 std::cout << "ERROR" << std::endl;
@@ -120,27 +86,70 @@ int main() {
             }
             break;
         case 2:
-            std::cout << "Thank you for playing Fallout 3: San Fransisco" << std::endl;
-            loop = false;
+            std::cout << "1 For Up, 2 For Down: ";
+            std::cin >> ans3;
+            switch(ans3) {
+            case 1:
+                player->MoveY(1);
+                break;
+            case 2:
+                player->MoveY(-1);
+                break;
+            default:
+                std::cout << "ERROR" << std::endl;
+                break;
+            }
             break;
         default:
             std::cout << "ERROR" << std::endl;
             break;
         }
+        break;
+    case 2:
+        std::cout << "Thank you for playing Fallout 3: San Fransisco" << std::endl;
+        loop = false;
+        break;
+    default:
+        std::cout << "ERROR" << std::endl;
+        break;
+    }
+}
+
+int main() {
+    srand(47329874);
+
+    Player* player;
+    //player = ask_player();
+    player = new Player();
+
+    Map map = {3, 3};
+
+    bool loop = true;
+    while(loop) {
+        move_player(player, loop);
 
         if(!player_in_map(*player, map)) {
             std::cout << "Player outside map borders! Resetting coordinates and damaging player!" << std::endl;
             player->Damage(10);
             player->Move();
-            print_player_pos(*player);
-            std::cout << "Health: " << player->GetHealth() << std::endl;
         } else {
             std::cout << "Player still inside borders!" << std::endl;
-            print_player_pos(*player);
         }
-    }
 
-    print_player(*player);
+        int chance = (rand() % 10) + 1;
+        if(player->GetX() == 2 && player->GetY() == 2 && chance < 3) {
+            std::cout << "You are in the chamber of the ghouls and got unlucky" << std::endl;
+            player->Damage(20);
+        }
+
+        if(player->GetHealth() <= 0) {
+            std::cout << "You are dead :(" << std::endl;
+            std::cout << "Thank you for playing Fallout 3: San Fransisco" << std::endl;
+            loop = false;
+        }
+
+        print_player(*player);
+    }
 
     delete player;
 

@@ -12,8 +12,6 @@ struct Special {
 constexpr Special DEFAULT_SPECIAL = {5, 5, 5, 5, 5, 5, 5};
 constexpr int DEFAULT_X = 1;
 constexpr int DEFAULT_Y = 1;
-constexpr int X_BORDER = 0;
-constexpr int Y_BORDER = 0;
 
 class Player {
 private:
