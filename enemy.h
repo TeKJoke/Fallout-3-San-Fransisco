@@ -1,16 +1,18 @@
-#ifndef BOSS_H
-#define BOSS_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 #include "entity.h"
 
-constexpr int BOSS_ATTACK_DAMAGE = 14;
+constexpr int WEAK = 0;
 
-class Boss : public Entity {
+class Enemy : public Entity {
 private:
     int health;
     int attack_damage;
+    int type;
 public:
-    Boss();
+    Enemy();
+    Enemy(int type);
     int GetHealth() override;
     void Damage(int amount) override;
     int GetAttackDamage() override;

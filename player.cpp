@@ -30,15 +30,43 @@ void Player::MoveY(int amount_moved) {
     this->y_pos += amount_moved;
 }
 
-void Player::Move() {
+void Player::MoveDefault() {
     this->x_pos = DEFAULT_X;
     this->y_pos = DEFAULT_Y;
 }
 
-void Player::Damage(int damg) {
-    this->health -= damg;
+void Player::Damage(int amount) {
+    this->health -= amount;
 }
 
 int Player::GetHealth() { return health; }
 
 int Player::GetAttackDamage() { return attack_damage; }
+
+void Player::BoostStat(int which_stat) {
+    switch(which_stat) {
+    case 0:
+        this->special.strength++;
+        break;
+    case 1:
+        this->special.perseption++;
+        break;
+    case 2:
+        this->special.endurance++;
+        break;
+    case 3:
+        this->special.charisma++;
+        break;
+    case 4:
+        this->special.intelligence++;
+        break;
+    case 5:
+        this->special.agility++;
+        break;
+    case 6:
+        this->special.luck++;
+        break;
+    default:
+        break;
+    }
+}

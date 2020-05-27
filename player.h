@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "entity.h"
 
 struct Special {
     int strength, perseption, endurance, charisma, \
@@ -10,10 +11,18 @@ struct Special {
 };
 
 constexpr Special DEFAULT_SPECIAL = {5, 5, 5, 5, 5, 5, 5};
-constexpr int DEFAULT_X = 3;
-constexpr int DEFAULT_Y = 3;
+constexpr int DEFAULT_X = 1;
+constexpr int DEFAULT_Y = 1;
+constexpr int STRENGTH = 0;
+constexpr int PERSEPTION = 1;
+constexpr int ENDURANCE = 2;
+constexpr int CHARISMA = 3;
+constexpr int INTELLIGENCE = 4;
+constexpr int AGILITY = 5;
+constexpr int LUCK = 6;
+constexpr int MAX_SPECIAL = 49;
 
-class Player {
+class Player : public Entity {
 private:
     int health;
     std::string name;
@@ -29,10 +38,11 @@ public:
     int GetY();
     void MoveX(int amount_moved);
     void MoveY(int amount_moved);
-    void Move();
-    void Damage(int damg);
-    int GetHealth();
-    int GetAttackDamage();
+    void MoveDefault();
+    void Damage(int amount) override;
+    int GetHealth() override;
+    int GetAttackDamage() override;
+    void BoostStat(int which_stat);
 };
 
 #endif
