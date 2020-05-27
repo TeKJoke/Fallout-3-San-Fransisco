@@ -1,10 +1,13 @@
 #include "player.h"
 
 Player::Player()
-    : health(100), name("Unknown"), x_pos(DEFAULT_X), y_pos(DEFAULT_Y), special(DEFAULT_SPECIAL), attack_damage(this->special.strength * 3) {}
+    : name("Unknown"), special(DEFAULT_SPECIAL) {}
 
-Player::Player(int health, std::string name, int x_pos, int y_pos, Special special) 
-    : health(health), name(name), x_pos(x_pos), y_pos(y_pos), special(special) {}
+Player::Player(std::string name, Special special)
+    : name(name), special(special) {}
+
+Player::Player(int x_pos, int y_pos, Special special) 
+    : x_pos(x_pos), y_pos(y_pos), special(special) {}
 
 void Player::PrintStats() {
     std::cout << "Health: " << health << std::endl;

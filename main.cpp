@@ -46,18 +46,15 @@ Special make_special() {
 }
 
 Player* ask_player() {
-    int health;
     std::string name;
     Special special;
 
-    std::cout << "Health: ";
-    std::cin >> health;
     std::cout << "Name: ";
     std::cin >> name;
 
     special = make_special();
 
-    Player* player = new Player(health, name, DEFAULT_X, DEFAULT_Y, special);
+    Player* player = new Player(name, special);
 
     return player;
 }
@@ -141,7 +138,8 @@ void room2_1(Player* player) {
             int chance = (rand() % 10) + 1;
             if(chance < 6) {
                 enemy[i].Damage(player->GetAttackDamage());
-                std::cout << "Enemy" << i << "health: " << enemy[i].GetHealth() << std::endl;
+                std::cout << "Enemy " << i << " got damaged!" << std::endl;
+                std::cout << "Enemy " << i << " health: " << enemy[i].GetHealth() << std::endl;
             } else if(chance > 8) {
                 player->Damage(enemy[i].GetAttackDamage());
                 std::cout << "Player got damaged!" << std::endl;
@@ -211,6 +209,8 @@ int main() {
     boss = new Boss();
 
     Map map = {3, 3};
+
+    print_player(*player);
 
     bool loop = true;
     while(loop) {

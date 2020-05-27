@@ -24,15 +24,17 @@ constexpr int MAX_SPECIAL = 49;
 
 class Player : public Entity {
 private:
-    int health;
     std::string name;
-    int x_pos;
-    int y_pos;
+    int x_pos = DEFAULT_X;
+    int y_pos = DEFAULT_Y;
     Special special;
-    int attack_damage;
+    int health = this->special.endurance * 11;
+    int attack_damage = this->special.strength * 3;
+    int speed = this->special.agility;
 public:
     Player();
-    Player(int health, std::string name, int x_pos, int y_pos, Special special);
+    Player(std::string name, Special special);
+    Player(int x_pos, int y_pos, Special special);
     void PrintStats();
     int GetX();
     int GetY();
