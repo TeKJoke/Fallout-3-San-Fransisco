@@ -1,0 +1,10 @@
+1. Add speed to the game so that the fights are based on who has the highest speed stat,
+    which should be based onthe agility SPEICIAL.
+2. Add the luck SPEICIAL influence the fights too, instead of being random.
+3. Add npc's.
+4. Add basic dialog options.
+5. Make charisma and intelligence influence the dialog options so that there are certain requirements
+    for specific dialog options.
+6. Add more types of enemies.
+7. Add a border to the map and make an out-of-bounds area accesible as an easter egg.
+8. Add a save mechanic. 
