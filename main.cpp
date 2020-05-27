@@ -90,10 +90,10 @@ void move_player(Player* player, bool& loop) {
             player->MoveX(-1);
             break;
         case 3:
-            player->MoveY(1);
+            player->MoveY(-1);
             break;
         case 4:
-            player->MoveY(-1);
+            player->MoveY(1);
             break;
         default:
             std::cout << "ERROR" << std::endl;
@@ -138,20 +138,35 @@ void room2_1(Player* player) {
     bool loop = true;
     while(loop) {
         for(size_t i = 0; i < amount_of_enemies; i++) {
-            if(player->GetHealth() <= 0 || enemy[i].GetHealth() <= 0) loop = false;
-
             int chance = (rand() % 10) + 1;
             if(chance < 6) {
-                enemy->Damage(player->GetAttackDamage());
+                enemy[i].Damage(player->GetAttackDamage());
                 std::cout << "Enemy" << i << "health: " << enemy[i].GetHealth() << std::endl;
             } else if(chance > 8) {
                 player->Damage(enemy[i].GetAttackDamage());
+                std::cout << "Player got damaged!" << std::endl;
                 std::cout << "Player health: " << player->GetHealth() << std::endl;
+            }
+
+            if(i == 0) {
+                if(player->GetHealth() <= 0 || enemy[i].GetHealth() <= 0 && enemy[i+1].GetHealth() <= 0) loop = false;
+            } else if(i == 1) {
+                if(player->GetHealth() <= 0 || enemy[i].GetHealth() <= 0 && enemy[i-1].GetHealth() <= 0) loop = false;
             }
         }
     }
-
     return;
+}
+
+void room2_2(Player* player) {
+    int chance = (rand() % 10) + 1;
+    if(chance  < 5) {
+        std::cout << "You are in the chamber of the ghouls and got unlucky" << std::endl;
+        player->Damage(20);
+    } else {
+        std::cout << "You are in the chamber of the ghouls and they let you walk freely" << std::endl;
+        player->BoostStat(LUCK);
+    }
 }
 
 void boss_room(Player* player, Boss* boss) {
@@ -174,6 +189,18 @@ void boss_room(Player* player, Boss* boss) {
     return;
 }
 
+void print_map(Player player, Map map) {
+    std::cout << "X, Y: " << player.GetX() << ", " << player.GetY() << std::endl;
+    for(size_t i = 0; i < map.x_length; i++) {
+        for(size_t j = 0; j < map.y_length; j++) {
+            if(player.GetY() == i + 1 && player.GetX() == j + 1) {
+                std::cout << "@ ";
+            } else std::cout << "# ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 int main() {
     srand(471329874);
 
@@ -193,7 +220,8 @@ int main() {
             player->MoveDefault();
         } 
 
-        int chance = (rand() % 10) + 1;
+        print_map(*player, map);
+
         if(player->GetX() == 1 && player->GetY() == 1) {
             main_room();
         } else if(player->GetX() == 1 && player->GetY() == 2) {
@@ -202,13 +230,12 @@ int main() {
             room1_3(player);
         } else if(player->GetX() == 2 && player->GetY() == 1) {
             room2_1(player);
-        } else if(player->GetX() == 2 && player->GetY() == 2 && chance < 3) {
-            std::cout << "You are in the chamber of the ghouls and got unlucky" << std::endl;
-            player->Damage(20);
         } else if(player->GetX() == 2 && player->GetY() == 2) {
-            std::cout << "You are in the chamber of the ghouls and they let you walk freely" << std::endl;
+            room2_2(player);
         } else if(player->GetX() == 3 && player->GetY() == 3) {
             boss_room(player, boss);
+        } else {
+            std::cout << "Move so that something happenes" << std::endl;
         }
 
         move_player(player, loop);
@@ -226,6 +253,7 @@ int main() {
     print_player(*player);
 
     delete player;
+    delete boss;
 
     return 0;
 }
