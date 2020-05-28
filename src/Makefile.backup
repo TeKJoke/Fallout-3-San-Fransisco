@@ -1,0 +1,12 @@
+CXX       := g++
+CXX_FLAGS := -Wall -std=c++20 -g
+
+main: main.o player.o enemy.o boss.o map.h; $(CXX) $(CXXFLAGS) -o main main.o player.o enemy.o boss.o map.h
+
+main.o: main.cpp player.h enemy.h boss.h map.h; $(CXX) $(CXXFLAGS) -c main.cpp
+
+player.o: player.h entity.h
+
+enemy.o: enemy.h entity.h
+
+boss.o: boss.h entity.h
